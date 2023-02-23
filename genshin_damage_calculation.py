@@ -8,7 +8,9 @@ from tkinter import *
 from tkinter import ttk
 
 # Input critValue takes standard CV 3 digit calculations
-def calculateBestRatio(critValue, reasonablePercent):
+def calculateBestRatio():
+    critValue = float(critValueInput.get())
+
     bestRatio = 1.0
     bestMultiplier = 0.0
     reasonableRatio = 1.0
@@ -48,11 +50,32 @@ def calculateBestRatio(critValue, reasonablePercent):
         + str(reasonableRatio) + " with a multiplier of " + str(reasonableMultiplier))
 
 root = Tk()
-root.title = "Crit Ratio Calculator"
+root.title("Crit Ratio Calculator")
 
 frame = ttk.Frame(root, padding="3 3 12 12")
 frame.grid(column=0, row=0, sticky=(N, W, E, S))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
-calculateBestRatio(325, 1)
+ratiosList = StringVar()
+ratiosListFrame = ttk.Label(frame, textvariable=ratiosList).grid(column=1, row=1, rowspan=4, sticky=(N, W))
+
+critValueInput = StringVar()
+ttk.Label(frame, text="Crit Value").grid(column=2, row=1, sticky=W)
+critValueEntry = ttk.Entry(frame, width=10, textvariable=critValueInput)
+critValueEntry.grid(column=3, row=1, sticky=W)
+ttk.Label(frame, text="Crit Value (CV) is taken from the formula\nCrit Value = 2(Crit Rate) + Crit Damage", padding=(0,5,0,12)).grid(column=2, row=2, columnspan=3, sticky=(N, W))
+
+reasonablePercent = StringVar()
+ttk.Label(frame, text="(Optional) Reasonable Percent").grid(column=2, row=3, columnspan=2, sticky=E)
+reasonablePercentEntry = ttk.Entry(frame, width=3, textvariable=reasonablePercent)
+reasonablePercentEntry.grid(column=4, row=3)
+ttk.Label(frame, text="%").grid(column=5, row=3, sticky=W)
+
+calculateButton = ttk.Button(frame, text="Calculate", command=calculateBestRatio)
+calculateButton.grid(column=2, columnspan=4, row=4, pady=20)
+
+critValueEntry.focus()
+root.bind("<Return>", calculateBestRatio)
+
+root.mainloop()
